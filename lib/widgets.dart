@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 Widget buildPercentIndicator(String className, double classConfidence) {
@@ -60,9 +61,22 @@ Widget buildFruitInfo(Map resultsDict, BuildContext context) {
               "Je pense à ${(confidence * 100).toStringAsFixed(0)}% que c'est un(e) ${snapshot.data['name']}",
               style: Theme.of(context).textTheme.bodyLarge,
             ),
+            const SizedBox(width: 10),
             IconButton(
-              icon: const Icon(Icons.info),
-              iconSize: 20,
+              icon: const Icon(Icons.sticky_note_2),
+              iconSize: 25,
+              color: const Color.fromARGB(255, 214, 128, 240).withOpacity(0.5),
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all(
+                  CircleBorder(
+                    side: BorderSide(
+                      color: Colors.blueGrey.withOpacity(0.8),
+                    ),
+                  ),
+                ),
+                backgroundColor:
+                    MaterialStateProperty.all(Colors.blueGrey.withOpacity(0.1)),
+              ),
               onPressed: () {
                 showDialog(
                     context: context,
@@ -81,54 +95,59 @@ Widget buildFruitInfo(Map resultsDict, BuildContext context) {
 
 Widget buildPopUpInfo(dynamic infos, BuildContext context) {
   return AlertDialog(
-    title: Text(infos['name']),
+    contentPadding:
+        const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20.0),
+    title: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            const Icon(
+              Icons.sticky_note_2_rounded,
+              color: Color.fromARGB(255, 214, 128, 240),
+              size: 30,
+            ),
+            const SizedBox(width: 8.0),
+            Text(
+              infos['name'],
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        )
+      ],
+    ),
+    iconPadding: EdgeInsets.zero,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
     content: SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const Text(
-                'Période de récolte :',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(infos['harvest']),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Climat préférentiel :',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(infos['climate']),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Plant :',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(infos['plant']),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Pays d'origine :",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(infos['origin']),
-            ],
-          ),
-        ],
+      child: FittedBox(
+        fit: BoxFit.fill,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildInfoRow("Comestible", infos['edible'], 115),
+            const SizedBox(height: 10),
+            buildInfoRow("Apport nutritionnels", infos['health'], 58),
+            const SizedBox(height: 10),
+            buildInfoRow("Calories", infos['calorie'], 137),
+            const SizedBox(height: 10),
+            buildInfoRow("Famille", infos['family'], 142),
+            const SizedBox(height: 10),
+            buildInfoRow("Période de récolte", infos['harvest'], 70),
+            const SizedBox(height: 10),
+            buildInfoRow("Climat préférentiel", infos['climate'], 67),
+            const SizedBox(height: 10),
+            buildInfoRow("Plant :", infos['plant'], 148),
+            const SizedBox(height: 10),
+            buildInfoRow("Pays d'origine", infos['origin'], 99)
+          ],
+        ),
       ),
     ),
     actions: [
@@ -138,6 +157,20 @@ Widget buildPopUpInfo(dynamic infos, BuildContext context) {
         },
         child: const Text('Fermer'),
       ),
+    ],
+  );
+}
+
+Widget buildInfoRow(String title, String value, double spacing) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
+      SizedBox(width: spacing),
+      Text(value),
     ],
   );
 }

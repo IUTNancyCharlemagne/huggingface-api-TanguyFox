@@ -136,7 +136,7 @@ Widget buildPopUpInfo(dynamic infos, BuildContext context) {
             buildInfoRow("Apport nutritionnels", infos['health'], 58),
             const SizedBox(height: 10),
             buildInfoRow("Calories", infos['calorie'], 137),
-            const SizedBox(height: 10),
+            const SizedBox(height: 50),
             buildInfoRow("Famille", infos['family'], 142),
             const SizedBox(height: 10),
             buildInfoRow("Période de récolte", infos['harvest'], 70),

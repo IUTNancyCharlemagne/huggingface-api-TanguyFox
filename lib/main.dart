@@ -18,7 +18,7 @@ final List<String> imgList = [
   'https://raw.githubusercontent.com/IUTNancyCharlemagne/huggingface-api-TanguyFox/main/assets/samples/apple/red_apple.jpeg',
   'https://raw.githubusercontent.com/IUTNancyCharlemagne/huggingface-api-TanguyFox/main/assets/samples/banana/pilled_banana.jpeg',
   'https://raw.githubusercontent.com/IUTNancyCharlemagne/huggingface-api-TanguyFox/main/assets/samples/mango/mango_on_tree.jpeg',
-  'https://raw.githubusercontent.com/IUTNancyCharlemagne/huggingface-api-TanguyFox/main/assets/samples/mango/myrtille_in_hand.jpeg'
+  //'https://raw.githubusercontent.com/IUTNancyCharlemagne/huggingface-api-TanguyFox/main/assets/samples/mango/myrtille_in_hand.jpeg'
 ];
 
 void main() {
@@ -206,7 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           padding: const EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
+                              vertical: 10.0, horizontal: 8.0),
                           child: Text(
                             imgList[imgList.indexOf(item)]
                                 .split('/')
@@ -217,6 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               fontSize: 15.0,
                               fontWeight: FontWeight.bold,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),
@@ -229,6 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
+          centerTitle: true,
           backgroundColor:
               const Color.fromARGB(236, 250, 215, 255).withOpacity(0.5),
         ),

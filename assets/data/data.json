@@ -9,7 +9,8 @@
     "plant" : "Pommier (arbre)",
     "origin" : "Asie", 
     "health" : "Fibres, vitamines, antioxydants",
-    "calorie" : "52kcal/100g"
+    "calorie" : "52kcal/100g",
+    "conservation" : "Quelques semaines / mois (suivant la variété)"
 },
 {
     "label" : "mango",
@@ -21,7 +22,8 @@
     "plant" : "Manguier (arbre)",
     "origin" : "Inde",
     "health" : "Vitamines, antioxydants",
-    "calorie" : "60kcal/100g"
+    "calorie" : "60kcal/100g",
+    "conservation" : "2 jours (temp. ambiante)"
 },
 {
     "label" : "banana",
@@ -33,7 +35,8 @@
     "plant" : "Bananier (herbe)",
     "origin" : "Papouasie-Nouvelle-Guinée",
     "health" : "Fibres, vitamines, minéraux",
-    "calorie" : "89kcal/100g"
+    "calorie" : "89kcal/100g",
+    "conservation" : "2 semaines (temp. ambiante)"
 },
 {
     "label" : "blueberry",
@@ -45,6 +48,7 @@
     "plant" : "Myrtillier (buisson)",
     "origin" : "Amérique",
     "health" : "Vitamines, minéraux, antioxydants",
-    "calorie" : "57kcal/100g"
+    "calorie" : "57kcal/100g",
+    "conservation" : "1 semaine (frigo, couvertes)"
 }
 ]

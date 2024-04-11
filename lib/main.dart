@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:empty_widget/empty_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -15,26 +15,9 @@ import 'widgets.dart';
 import 'utils.dart';
 
 final List<String> imgList = [
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/bacterial_leaf_blight/100023.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/bacterial_leaf_blight/100049.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/bacterial_leaf_streak/100042.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/bacterial_leaf_streak/100084.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/bacterial_panicle_blight/100043.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/bacterial_panicle_blight/100058.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/blast/100004.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/blast/100006.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/brown_spot/100022.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/brown_spot/100001.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/dead_heart/100008.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/dead_heart/100020.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/downy_mildew/100031.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/downy_mildew/100017.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/hispa/100003.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/hispa/100005.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/normal/100007.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/normal/100002.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/tungro/100011.jpg',
-  'https://raw.githubusercontent.com/dnth/huggingface-timm-mobile-blogpost/main/sample_images/tungro/100013.jpg'
+  'https://raw.githubusercontent.com/IUTNancyCharlemagne/huggingface-api-TanguyFox/main/assets/samples/apple/red_apple.jpeg',
+  'https://raw.githubusercontent.com/IUTNancyCharlemagne/huggingface-api-TanguyFox/main/assets/samples/banana/pilled_banana.jpeg',
+  'https://raw.githubusercontent.com/IUTNancyCharlemagne/huggingface-api-TanguyFox/main/assets/samples/mango/mango_on_tree.jpeg'
 ];
 
 void main() {
@@ -42,24 +25,26 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Paddy Disease Classifier',
+      title: 'Fruits Classifier',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Paddy Disease Classifier'),
+      home: const MyHomePage(
+        title: 'Fruits Classifier',
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
 
   final String title;
 
@@ -73,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String? _resultString;
   Map _resultDict = {
-    "label": "None",
+    "label": "Aucun",
     "confidences": [
       {"label": "None", "confidence": 0.0},
       {"label": "None", "confidence": 0.0},
@@ -114,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           ListTile(
             leading: const Icon(Icons.camera),
-            title: const Text("Camera"),
+            title: const Text("Appareil photo"),
             onTap: () async {
               final XFile? pickedFile =
                   await ImagePicker().pickImage(source: ImageSource.camera);
@@ -125,9 +110,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   clearInferenceResults();
                 });
 
-                //File croppedFile = await cropImage(pickedFile);
-                //final imgFile = File(croppedFile.path);
-                final imgFile = File(pickedFile.path);
+                File croppedFile = await cropImage(pickedFile);
+                final imgFile = File(croppedFile.path);
+                //final imgFile = File(pickedFile.path);
 
                 setState(() {
                   imageURI = imgFile;
@@ -140,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           ListTile(
             leading: const Icon(Icons.image),
-            title: const Text("Gallery"),
+            title: const Text("Gallerie"),
             onTap: () async {
               final XFile? pickedFile =
                   await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -222,7 +207,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 20.0),
                           child: Text(
-                            'GT: ${imgList[imgList.indexOf(item)].split('/').reversed.elementAt(1)}', // get the class name from url
+                            imgList[imgList.indexOf(item)]
+                                .split('/')
+                                .reversed
+                                .elementAt(1), // get the class name from url
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 15.0,
@@ -238,47 +226,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return LoaderOverlay(
       child: Scaffold(
-        drawer: Drawer(
-          // Add a ListView to the drawer. This ensures the user can scroll
-          // through the options in the drawer if there isn't enough vertical
-          // space to fit everything.
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-                child: Text('My Paddy Disease App'),
-              ),
-              ListTile(
-                title: const Text('About'),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: const Text('Version'),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        ),
         appBar: AppBar(
           title: Text(widget.title),
+          backgroundColor:
+              const Color.fromARGB(236, 250, 215, 255).withOpacity(0.5),
         ),
         body: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -289,8 +244,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: EmptyWidget(
                         image: null,
                         packageImage: PackageImage.Image_3,
-                        title: 'No image',
-                        subTitle: 'Select an image',
+                        title: 'Aucune image',
+                        subTitle: 'Sélectionnez une image',
                         titleTextStyle: const TextStyle(
                           fontSize: 15,
                           color: Color(0xff9da9c7),
@@ -310,22 +265,19 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
               const SizedBox(
-                height: 8,
+                height: 20,
               ),
-              Text("Top 3 predictions",
+              Text("Prédiction (Trouvé en : $_latency ms) :",
                   style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 8),
-              FittedBox(child: buildResultsIndicators(_resultDict)),
-              const SizedBox(height: 8),
-              Text("Latency: $_latency ms",
+              FittedBox(child: buildFruitInfo(_resultDict, context)),
+              const SizedBox(height: 30),
+              Text("Exemples pour tester :",
                   style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: 8),
-              Text("Samples", style: Theme.of(context).textTheme.titleLarge),
               CarouselSlider(
                 options: CarouselOptions(
                   height: 180,
                   autoPlay: true,
-                  // aspectRatio: 2.5,
                   viewportFraction: 0.4,
                   enlargeCenterPage: false,
                   enlargeStrategy: CenterPageEnlargeStrategy.height,
@@ -338,10 +290,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: MediaQuery.of(context).size.width * 0.5,
                   color: Colors.blue,
                   successColor: Colors.green,
-                  // resetAfterDuration: true,
-                  // resetDuration: const Duration(seconds: 10),
-                  child: const Text('Classify!',
-                      style: TextStyle(color: Colors.white)),
                   controller: _btnController,
                   onPressed: isClassifying || imageURI == null
                       ? null // null value disables the button
@@ -349,12 +297,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           isClassifying = true;
 
                           imgBytes = imageURI!.readAsBytesSync();
-                          String base64Image = "data:image/png;base64," +
-                              base64Encode(imgBytes!);
+                          String base64Image =
+                              "data:image/png;base64,${base64Encode(imgBytes!)}";
 
                           try {
                             Stopwatch stopwatch = Stopwatch()..start();
-                            final result = await classifyRiceImage(base64Image);
+                            final result =
+                                await classifyFruitsImage(base64Image);
 
                             setState(() {
                               _resultString = parseResultsIntoString(result);
@@ -368,6 +317,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           }
                           isClassifying = false;
                         },
+                  // resetAfterDuration: true,
+                  // resetDuration: const Duration(seconds: 10),
+                  child: const Text('Qu\'est-ce que c\'est ?',
+                      style: TextStyle(color: Colors.white)),
                 ),
               ),
               Row(
@@ -383,7 +336,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           throw 'Could not launch $link';
                         }
                       },
-                      text: "Made by https://dicksonneoh.com",
+                      text:
+                          "Réalisé par Tanguy RENARD d'après le projet de https://dicksonneoh.com/",
                     ),
                   ),
                   const Spacer(),
@@ -393,7 +347,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
-          label: const Text("Take picture"),
+          label: const Text("Prendre une photo"),
           icon: const Icon(Icons.camera),
           onPressed: () {
             showModalBottomSheet<void>(

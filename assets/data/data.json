@@ -3,7 +3,7 @@
     "label" : "apple",
     "name" : "Pomme",
     "harvest" : "Août - Septembre",
-    "weather" : "Chaud et beaucoup de lumière",
+    "climate" : "Chaud avec beaucoup de lumière",
     "plant" : "Pommier (arbre)",
     "origin" : "Asie" 
 },
@@ -11,7 +11,7 @@
     "label" : "mango",
     "name" : "Mangue",
     "harvest" : "Mai - Septembre",
-    "weather" : "Chaud avec mousson",
+    "climate" : "Chaud avec mousson",
     "plant" : "Manguier (arbre)",
     "origin" : "Inde"
 },
@@ -19,7 +19,7 @@
     "label" : "banana",
     "name" : "Banane",
     "harvest" : "Toute l'année",
-    "weather" : "Tropical / Chaud et humide",
+    "climate" : "Tropical / Chaud et humide",
     "plant" : "Bananier (herbe)",
     "origin" : "Papouasie-Nouvelle-Guinée"
 },
@@ -27,7 +27,7 @@
     "label" : "blueberry",
     "name" : "Myrtille",
     "harvest" : "Juin - Septembre",
-    "weather" : "Léger soleil / Mi-ombre",
+    "climate" : "Léger soleil / Mi-ombre",
     "plant" : "Myrtillier (buisson)",
     "origin" : "Amérique"
 }

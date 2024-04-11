@@ -18,7 +18,7 @@ final List<String> imgList = [
   'https://raw.githubusercontent.com/IUTNancyCharlemagne/huggingface-api-TanguyFox/main/assets/samples/apple/red_apple.jpeg',
   'https://raw.githubusercontent.com/IUTNancyCharlemagne/huggingface-api-TanguyFox/main/assets/samples/banana/pilled_banana.jpeg',
   'https://raw.githubusercontent.com/IUTNancyCharlemagne/huggingface-api-TanguyFox/main/assets/samples/mango/mango_on_tree.jpeg',
-  //'https://raw.githubusercontent.com/IUTNancyCharlemagne/huggingface-api-TanguyFox/main/assets/samples/mango/myrtille_in_hand.jpeg'
+  'https://raw.githubusercontent.com/IUTNancyCharlemagne/huggingface-api-TanguyFox/main/assets/samples/mango/myrtille_in_hand.jpeg'
 ];
 
 void main() {
